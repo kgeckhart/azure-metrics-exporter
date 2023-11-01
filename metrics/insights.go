@@ -8,6 +8,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/monitor/armmonitor"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/webdevops/go-common/utils/to"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
@@ -32,6 +33,10 @@ func (p *MetricProber) MetricsClient(subscriptionId string) (*armmonitor.Metrics
 		clientOpts.PerCallPolicies,
 		noCachePolicy{},
 	)
+	if p.logger.Level() == zapcore.DebugLevel {
+		clientOpts.Logging.IncludeBody = true
+	}
+
 	return armmonitor.NewMetricsClient(subscriptionId, p.AzureClient.GetCred(), clientOpts)
 }
 
