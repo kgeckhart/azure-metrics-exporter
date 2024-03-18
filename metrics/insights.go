@@ -35,7 +35,7 @@ func (p *MetricProber) MetricsClient(subscriptionId string) (*armmonitor.Metrics
 		noCachePolicy{},
 		runtime.NewLogPolicy(&policy.LogOptions{
 			AllowedQueryParams: []string{
-				"filter",
+				"Filter",
 				"AutoAdjustTimegrain",
 				"ValidateDimensions",
 				"api-version",
