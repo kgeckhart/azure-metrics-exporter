@@ -34,7 +34,19 @@ func (p *MetricProber) MetricsClient(subscriptionId string) (*armmonitor.Metrics
 		clientOpts.PerCallPolicies,
 		noCachePolicy{},
 		runtime.NewLogPolicy(&policy.LogOptions{
-			IncludeBody: true,
+			AllowedQueryParams: []string{
+				"filter",
+				"AutoAdjustTimegrain",
+				"ValidateDimensions",
+				"api-version",
+				"interval",
+				"metricnames",
+				"metricnamespace",
+				"region",
+				"resultType",
+				"timespan",
+				"top",
+			},
 		}),
 	)
 	return armmonitor.NewMetricsClient(subscriptionId, p.AzureClient.GetCred(), clientOpts)
