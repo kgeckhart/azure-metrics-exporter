@@ -292,7 +292,7 @@ func (p *MetricProber) discoverResourceRegions() (map[string][]string, error) {
 
 	query := fmt.Sprintf(`Resources | where type == "%s" | summarize count() by subscriptionId, location`, strings.ToLower(p.settings.ResourceType))
 
-	results, err := p.AzureClient.ExecuteResourceGraphQuery(p.ctx, p.settings.Subscriptions, query)
+	results, err := p.AzureClient.ExecuteResourceGraphQuery(p.ctx, query, armclient.ResourceGraphOptions{Subscriptions: p.settings.Subscriptions})
 	if err != nil {
 		return nil, err
 	}
