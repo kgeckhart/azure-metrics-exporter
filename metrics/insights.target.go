@@ -66,19 +66,19 @@ func (r *AzureInsightMetricsResult) SendMetricToChannel(channel chan<- Prometheu
 						// add resource tags as labels
 						metricLabels = r.prober.AzureResourceTagManager.AddResourceTagsToPrometheusLabels(r.prober.ctx, metricLabels, resourceId)
 
-						if len(dimensions) == 1 {
-							// we have only one dimension
-							// add one dimension="foobar" label (backward compatibility)
-							for _, dimensionValue := range dimensions {
-								metricLabels["dimension"] = dimensionValue
-							}
-						} else if len(dimensions) >= 2 {
-							// we have multiple dimensions
+						if len(dimensions) >= 2 || r.prober.settings.AlwaysIncludeDimensionName {
+							// we have multiple dimensions or should always use the dimension name
 							// add each dimension as dimensionXzy="foobar" label
 							for dimensionName, dimensionValue := range dimensions {
 								labelName := "dimension" + stringsCommon.UppercaseFirst(dimensionName)
 								labelName = metricLabelNotAllowedChars.ReplaceAllString(labelName, "")
 								metricLabels[labelName] = dimensionValue
+							}
+						} else {
+							// we have only one dimension
+							// add one dimension="foobar" label (backward compatibility)
+							for _, dimensionValue := range dimensions {
+								metricLabels["dimension"] = dimensionValue
 							}
 						}
 

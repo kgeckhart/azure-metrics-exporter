@@ -34,7 +34,8 @@ type (
 		MetricFilter  string
 		MetricOrderBy string
 
-		ValidateDimensions bool
+		ValidateDimensions         bool
+		AlwaysIncludeDimensionName bool
 
 		MetricTemplate string
 		HelpTemplate   string
